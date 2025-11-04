@@ -1,6 +1,5 @@
 package com.tech.assessment.service;
 
-import com.tech.assessment.model.User;
 import com.tech.assessment.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -17,7 +16,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class JWTServiceImpl implements JWTService {

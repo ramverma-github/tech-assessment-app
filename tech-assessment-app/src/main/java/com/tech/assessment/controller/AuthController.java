@@ -2,6 +2,7 @@ package com.tech.assessment.controller;
 
 import com.tech.assessment.dto.JwtResponse;
 import com.tech.assessment.dto.LoginRequest;
+import com.tech.assessment.dto.RegisterRequest;
 import com.tech.assessment.model.User;
 import com.tech.assessment.service.JWTService;
 import com.tech.assessment.service.UserService;
@@ -15,7 +16,7 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,9 +38,18 @@ public class AuthController {
     @Operation(summary = "Register a user", description = "Registers a new user")
     @ApiResponse(responseCode = "201", description = "User registered successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input data")
-    public ResponseEntity<?> register(@Valid @RequestBody User user) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        if (Objects.isNull(request) || request.username().isBlank() ||
+                request.password().isBlank() || request.email().isBlank()) {
+            return ResponseEntity.badRequest().body("Username, Email, and Password are required");
+        }
+        User user = User.builder()
+                .username(request.username())
+                .email(request.email())
+                .password(request.password())
+                .build();
         User registeredUser = userService.registerUser(user);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 
     @PostMapping("/login")
