@@ -23,10 +23,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/profile")
+    @GetMapping("/{id}/profile")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public String userProfile() {
-        return "User profile details visible.";
+    public ResponseEntity<?> userProfile(@PathVariable UUID id) {
+        User user = userService.getUserById(id);
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/register")
