@@ -1,4 +1,4 @@
-package com.tech.assessment.constans;
+package com.tech.assessment.constant;
 
 public enum RoleType {
     USER,

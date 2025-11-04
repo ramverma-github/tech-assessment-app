@@ -1,6 +1,6 @@
 package com.tech.assessment.model;
 
-import com.tech.assessment.constans.RoleType;
+import com.tech.assessment.constant.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
