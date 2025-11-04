@@ -1,12 +1,13 @@
 package com.tech.assessment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -50,5 +51,6 @@ public class Question {
     private String difficulty;
 
     @ManyToMany(mappedBy = "questions")
-    private Set<Test> tests = new HashSet<>();
+    @JsonBackReference
+    private List<Test> tests = new ArrayList<>();;
 }

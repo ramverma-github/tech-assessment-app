@@ -1,5 +1,7 @@
 package com.tech.assessment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +24,7 @@ public class TestResult {
 
     @ManyToOne
     @JoinColumn(name = "test_id", nullable = false)
+    @JsonBackReference
     private Test test;
 
     @Column(name = "user_id", nullable = false)
