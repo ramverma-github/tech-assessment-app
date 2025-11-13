@@ -109,6 +109,7 @@
 	</dependencies>
 
 	<build>
+        <finalName>tech-assessment-app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
