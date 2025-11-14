@@ -3,6 +3,7 @@ package com.tech.assessment.controller;
 import com.tech.assessment.dto.JwtResponse;
 import com.tech.assessment.dto.LoginRequest;
 import com.tech.assessment.dto.RegisterRequest;
+import com.tech.assessment.dto.UserDto;
 import com.tech.assessment.model.User;
 import com.tech.assessment.service.JWTService;
 import com.tech.assessment.service.UserService;
@@ -49,7 +50,9 @@ public class AuthController {
                 .email(request.email())
                 .password(request.password())
                 .build();
-        User registeredUser = userService.registerUser(user);
+
+        UserDto userDto = new UserDto(null, request.username(), request.password(), request.email(), null, null, null);
+        UserDto registeredUser = userService.registerUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 

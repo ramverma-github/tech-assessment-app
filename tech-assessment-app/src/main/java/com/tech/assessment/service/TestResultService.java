@@ -1,5 +1,6 @@
 package com.tech.assessment.service;
 
+import com.tech.assessment.dto.TestResultDto;
 import com.tech.assessment.model.TestResult;
 
 import java.util.List;
@@ -7,11 +8,11 @@ import java.util.UUID;
 
 public interface TestResultService {
 
-    TestResult createResult(TestResult result);
-    TestResult getResultById(UUID id);
-    List<TestResult> getAllResults();
-    List<TestResult> getResultsByUserId(UUID userId);
-    List<TestResult> getResultsByTestId(UUID testId);
-    TestResult updateResult(UUID id, TestResult result);
+    TestResultDto createResult(TestResultDto result);
+    TestResultDto getResultById(UUID id);
+    List<TestResultDto> getAllResults();
+    List<TestResultDto> getResultsByUserId(UUID userId);
+    List<TestResultDto> getResultsByTestId(UUID testId);
+    TestResultDto updateResult(UUID id, TestResultDto result);
     void deleteResult(UUID id);
 }

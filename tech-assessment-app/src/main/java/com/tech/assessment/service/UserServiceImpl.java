@@ -1,5 +1,6 @@
 package com.tech.assessment.service;
 
+import com.tech.assessment.dto.UserDto;
 import com.tech.assessment.model.User;
 import com.tech.assessment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,13 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public User registerUser(User user) {
+    public UserDto registerUser(UserDto userDto) {
+        User user = User.builder()
+                .username(userDto.username())
+                .password(userDto.password())
+                .email(userDto.email())
+                .roles(userDto.roles())
+                .build();
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -29,31 +36,58 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Email already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+
+        User saved = userRepository.save(user);
+
+        return new UserDto(
+                saved.getId(),
+                saved.getUsername(),
+                saved.getPassword(),
+                saved.getEmail(),
+                saved.getRoles(),
+                saved.getCreatedAt(),
+                saved.getUpdatedAt());
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserDto(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getEmail(),
+                        user.getRoles(),
+                        user.getCreatedAt(),
+                        user.getUpdatedAt()))
+                .toList();
     }
 
     @Override
-    public User updateUser(UUID id, User user) {
+    public UserDto updateUser(UUID id, UserDto user) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         if (Objects.nonNull(existingUser)) {
-            if (userRepository.existsByUsername(user.getUsername()) && !existingUser.getUsername().equals(user.getUsername())) {
+            if (userRepository.existsByUsername(user.username()) && !existingUser.getUsername().equals(user.username())) {
                 throw new RuntimeException("Username already exists");
             }
-            if (userRepository.existsByEmail(user.getEmail()) && !existingUser.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(user.email()) && !existingUser.getEmail().equals(user.email())) {
                 throw new RuntimeException("Email already exists");
             }
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            existingUser.setEmail(user.getEmail());
-            existingUser.setRoles(user.getRoles());
+            existingUser.setUsername(user.username());
+            existingUser.setPassword(passwordEncoder.encode(user.password()));
+            existingUser.setEmail(user.email());
+            existingUser.setRoles(user.roles());
             existingUser.setUpdatedAt(LocalDateTime.now());
         }
-        return userRepository.save(existingUser);
+        User saved = userRepository.save(existingUser);
+        return new UserDto(
+                saved.getId(),
+                saved.getUsername(),
+                saved.getPassword(),
+                saved.getEmail(),
+                saved.getRoles(),
+                saved.getCreatedAt(),
+                saved.getUpdatedAt());
     }
 
     @Override
@@ -62,8 +96,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(UUID id) {
-        return userRepository.findById(id).orElse(null);
+    public UserDto getUserById(UUID id) {
+        return userRepository.findById(id)
+                .map(user -> new UserDto(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getEmail(),
+                        user.getRoles(),
+                        user.getCreatedAt(),
+                        user.getUpdatedAt()
+                )).orElse(null);
     }
 
 }

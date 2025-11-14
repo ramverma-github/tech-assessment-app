@@ -1,14 +1,15 @@
 package com.tech.assessment.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Entity
@@ -19,6 +20,8 @@ import java.util.UUID;
         })
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Question {
 
     @Id
@@ -49,8 +52,4 @@ public class Question {
 
     @Column(name = "difficulty", nullable = false)
     private String difficulty;
-
-    @ManyToMany(mappedBy = "questions")
-    @JsonBackReference
-    private List<Test> tests = new ArrayList<>();;
 }

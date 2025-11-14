@@ -1,6 +1,5 @@
 package com.tech.assessment.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,11 +23,11 @@ public class TestResult {
 
     @ManyToOne
     @JoinColumn(name = "test_id", nullable = false)
-    @JsonBackReference
     private Test test;
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "score")
     private int score;
@@ -42,4 +41,8 @@ public class TestResult {
     @Column(name = "submitted_at")
     private LocalDateTime submittedAt;
 
+    @JsonIgnore  // Prevents infinite recursion during serialization
+    public Test getTest() {
+        return test;
+    }
 }

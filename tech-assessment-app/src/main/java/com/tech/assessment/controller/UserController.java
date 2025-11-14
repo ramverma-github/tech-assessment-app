@@ -1,5 +1,6 @@
 package com.tech.assessment.controller;
 
+import com.tech.assessment.dto.UserDto;
 import com.tech.assessment.model.User;
 import com.tech.assessment.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,7 +28,7 @@ public class UserController {
     @GetMapping("/{id}/profile")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<?> userProfile(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
+        UserDto user = userService.getUserById(id);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
@@ -34,8 +36,8 @@ public class UserController {
     @Operation(summary = "Register a user", description = "Registers a new user")
     @ApiResponse(responseCode = "201", description = "User registered successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input data")
-    public ResponseEntity<?> register(@Valid @RequestBody User user) {
-        User registeredUser = userService.registerUser(user);
+    public ResponseEntity<?> register(@Valid @RequestBody UserDto user) {
+        UserDto registeredUser = userService.registerUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 
@@ -44,8 +46,8 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input data")
     @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<?> updateUser(@PathVariable UUID id, @Valid @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
+    public ResponseEntity<?> updateUser(@PathVariable UUID id, @Valid @RequestBody UserDto user) {
+        UserDto updatedUser = userService.updateUser(id, user);
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -54,32 +56,27 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User updated successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input data")
     @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<?> updateUserPartially(@PathVariable UUID id, @RequestBody User user) {
-        User existingUser = userService.getUserById(id);
+    public ResponseEntity<?> updateUserPartially(@PathVariable UUID id, @RequestBody UserDto user) {
+        UserDto existingUser = userService.getUserById(id);
         if (existingUser == null) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
-        if (Objects.nonNull(user.getUsername())) {
-            existingUser.setUsername(user.getUsername());
-        }
-        if (Objects.nonNull(user.getPassword())) {
-            existingUser.setPassword(user.getPassword()); 
-        }
-        if (Objects.nonNull(user.getEmail())) {
-            existingUser.setEmail(user.getEmail());
-        }
-        if (Objects.nonNull(user.getRoles())) {
-            existingUser.setRoles(user.getRoles());
-        }
-        User updatedUser = userService.updateUser(id, existingUser);
-        return ResponseEntity.ok(updatedUser);
+        UserDto userDto = new UserDto(null,
+                user.username() != null ? user.username() : existingUser.username(),
+                user.password() != null ? user.password() : existingUser.password(),
+                user.email() != null ? user.email() : existingUser.email(),
+                user.roles() != null ? user.roles() : existingUser.roles(),
+                existingUser.createdAt(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.ok(userService.updateUser(id, userDto));
     }
 
     @GetMapping
     @Operation(summary = "Get all users", description = "Returns a list of all registered users")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved list")
     @ApiResponse(responseCode = "204", description = "No users found")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -87,8 +84,8 @@ public class UserController {
     @Operation(summary = "Get user by ID", description = "Returns a user by their ID")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved user")
     @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
+        UserDto user = userService.getUserById(id);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
@@ -97,7 +94,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User deleted successfully")
     @ApiResponse(responseCode = "404", description = "User not found")
     public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
+        UserDto user = userService.getUserById(id);
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }

@@ -1,7 +1,9 @@
 package com.tech.assessment.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +17,7 @@ import java.util.*;
 @Table(name = "tests")
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Test {
 
     @Id
@@ -22,13 +25,13 @@ public class Test {
     @Column(columnDefinition = "UUID", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "duration_minutes", nullable = false)
     private int durationMinutes;
 
-    @Column(nullable = false)
+    @Column(name = "category", nullable = false)
     private String category;
 
     @Column(name = "start_time", nullable = false)
@@ -38,16 +41,12 @@ public class Test {
     private LocalDateTime endTime;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "test_questions",
+    @JoinTable(name = "test_questions",
             joinColumns = @JoinColumn(name = "test_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_id")
-    )
-    @JsonManagedReference
-    private List<Question> questions = new ArrayList<>();
+            inverseJoinColumns = @JoinColumn(name = "question_id"))
+    private Set<Question> questions = new HashSet<>();
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<TestResult> results = new ArrayList<>();
+    private Set<TestResult> results = new HashSet<>();
 
 }

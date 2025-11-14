@@ -1,6 +1,6 @@
 package com.tech.assessment.controller;
 
-import com.tech.assessment.model.Question;
+import com.tech.assessment.dto.QuestionDto;
 import com.tech.assessment.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +23,7 @@ public class QuestionController {
     @ApiResponse(responseCode = "200", description = "List of Questions retrieved successfully")
     @ApiResponse(responseCode = "404", description = "No Questions found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<Question>> getAllQuestions() {
+    public ResponseEntity<List<QuestionDto>> getAllQuestions() {
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
 
@@ -32,10 +32,8 @@ public class QuestionController {
     @ApiResponse(responseCode = "200", description = "Question retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Question not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<Question> getQuestionById(@PathVariable UUID id) {
-        return questionService.getQuestionById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<QuestionDto> getQuestionById(@PathVariable UUID id) {
+        return ResponseEntity.ok(questionService.getQuestionById(id));
     }
 
     @PostMapping
@@ -43,7 +41,7 @@ public class QuestionController {
     @ApiResponse(responseCode = "201", description = "Question created successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
+    public ResponseEntity<QuestionDto> createQuestion(@RequestBody QuestionDto question) {
         return ResponseEntity.ok(questionService.createQuestion(question));
     }
 
@@ -53,7 +51,7 @@ public class QuestionController {
     @ApiResponse(responseCode = "404", description = "Question not found")
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<Question> updateQuestion(@PathVariable UUID id, @RequestBody Question question) {
+    public ResponseEntity<QuestionDto> updateQuestion(@PathVariable UUID id, @RequestBody QuestionDto question) {
         return ResponseEntity.ok(questionService.updateQuestion(id, question));
     }
 
