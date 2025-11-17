@@ -3,7 +3,6 @@ package com.tech.assessment.service;
 import com.tech.assessment.dto.TestDto;
 import com.tech.assessment.model.Question;
 import com.tech.assessment.model.Test;
-import com.tech.assessment.model.TestResult;
 import com.tech.assessment.repository.QuestionRepository;
 import com.tech.assessment.repository.TestRepository;
 import com.tech.assessment.repository.TestResultRepository;

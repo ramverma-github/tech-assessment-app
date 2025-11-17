@@ -1,4 +1,4 @@
-package com.tech.assessment.service.impl;
+package com.tech.assessment.service;
 
 import com.tech.assessment.dto.TestResultDto;
 import com.tech.assessment.model.Test;
@@ -7,7 +7,6 @@ import com.tech.assessment.model.User;
 import com.tech.assessment.repository.TestRepository;
 import com.tech.assessment.repository.TestResultRepository;
 import com.tech.assessment.repository.UserRepository;
-import com.tech.assessment.service.TestResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

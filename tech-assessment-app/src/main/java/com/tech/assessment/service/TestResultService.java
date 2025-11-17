@@ -1,7 +1,6 @@
 package com.tech.assessment.service;
 
 import com.tech.assessment.dto.TestResultDto;
-import com.tech.assessment.model.TestResult;
 
 import java.util.List;
 import java.util.UUID;

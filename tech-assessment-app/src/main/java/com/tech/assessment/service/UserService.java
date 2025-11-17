@@ -1,7 +1,6 @@
 package com.tech.assessment.service;
 
 import com.tech.assessment.dto.UserDto;
-import com.tech.assessment.model.User;
 import java.util.List;
 import java.util.UUID;
 

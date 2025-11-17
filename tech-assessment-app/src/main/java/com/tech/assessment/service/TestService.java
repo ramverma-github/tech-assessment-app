@@ -1,10 +1,8 @@
 package com.tech.assessment.service;
 
 import com.tech.assessment.dto.TestDto;
-import com.tech.assessment.model.Test;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface TestService {

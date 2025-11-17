@@ -1,7 +1,6 @@
 package com.tech.assessment.controller;
 
 import com.tech.assessment.dto.UserDto;
-import com.tech.assessment.model.User;
 import com.tech.assessment.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 

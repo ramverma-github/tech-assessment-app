@@ -41,7 +41,7 @@ public class TestResult {
     @Column(name = "submitted_at")
     private LocalDateTime submittedAt;
 
-    @JsonIgnore  // Prevents infinite recursion during serialization
+    @JsonIgnore
     public Test getTest() {
         return test;
     }

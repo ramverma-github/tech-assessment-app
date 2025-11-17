@@ -1,16 +1,12 @@
 package com.tech.assessment.service;
 
 import com.tech.assessment.dto.QuestionDto;
-import com.tech.assessment.dto.TestResultDto;
 import com.tech.assessment.model.Question;
 import com.tech.assessment.repository.QuestionRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
